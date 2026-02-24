@@ -1,0 +1,80 @@
+<div class="max-w-3xl mx-auto py-8">
+  <div class="flex justify-between items-end mb-8">
+    <h1 class="text-4xl font-bold">新規投稿</h1>
+    <%= link_to "キャンセル", posts_path, class: "btn btn-ghost" %>
+  </div>
+
+  <div class="max-w-3xl mx-auto px-4 py-8">
+    <div class="bg-white shadow-xl rounded-2xl overflow-hidden border border-gray-100">
+      <div class="bg-gradient-to-r from-blue-600 to-indigo-700 px-8 py-6">
+        <h1 class="text-2xl font-bold text-white">学習をアウトプットする</h1>
+        <p class="text-blue-100 mt-1">あなたの発見や学びを記録・共有しましょう。</p>
+      </div>
+
+      <%= form_with(model: @post, class: "p-8 space-y-6", data: { controller: "post-form" }) do |f| %>
+        <% if @post.errors.any? %>
+          <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
+            <div class="flex">
+              <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                </svg>
+              </div>
+              <div class="ml-3">
+                <p class="text-sm text-red-700">修正が必要な箇所があります。</p>
+              </div>
+            </div>
+          </div>
+        <% end %>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <%= f.label :status, "公開設定", class: "block text-sm font-semibold text-gray-700 mb-2" %>
+            <%= f.select :status, Post.statuses.keys.map { |k| [t("enums.post.status.#{k}"), k] }, {}, class: "w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition" %>
+          </div>
+
+          <div>
+            <%= f.label :source_type_enum, "ソースのタイプ", class: "block text-sm font-semibold text-gray-700 mb-2" %>
+            <%= f.select :source_type_enum, Post.source_type_enums.keys.map { |k| [t("enums.post.source_type_enum.#{k}"), k] }, {}, 
+                class: "w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition",
+                data: { "post-form-target": "sourceType", action: "change->post-form#toggleFields" } %>
+          </div>
+        </div>
+
+        <div data-post-form-target="webFields" class="hidden animate-fade-in">
+          <label class="block text-sm font-semibold text-gray-700 mb-2">WebページのURL</label>
+          <%= text_field_tag "post[source_attributes][url]", (@post.source.url if @post.web_page? && @post.source), class: "w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition", placeholder: "https://example.com" %>
+          <p class="mt-2 text-xs text-gray-500">※ URLを入力すると、自動的にタイトルや画像を取得します。</p>
+        </div>
+
+        <div data-post-form-target="bookFields" class="hidden animate-fade-in">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">書籍タイトル</label>
+              <%= text_field_tag "post[source_attributes][title]", (@post.source.title if @post.book? && @post.source), class: "w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition", placeholder: "タイトルを入力" %>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-gray-700 mb-2">著者名</label>
+              <%= text_field_tag "post[source_attributes][author]", (@post.source.author if @post.book? && @post.source), class: "w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition", placeholder: "著者名を入力" %>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <%= f.label :title, "タイトル", class: "block text-sm font-semibold text-gray-700 mb-2" %>
+          <%= f.text_field :title, class: "w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition font-bold text-lg", placeholder: "投稿のタイトルを入力してください" %>
+        </div>
+
+        <div>
+          <%= f.label :content, "学びの内容 / 感想", class: "block text-sm font-semibold text-gray-700 mb-2" %>
+          <%= f.text_area :content, rows: 8, class: "w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition", placeholder: "何を学び、どう感じましたか？" %>
+        </div>
+
+        <div class="pt-6 border-t border-gray-100 flex items-center justify-end space-x-4">
+          <%= link_to "キャンセル", posts_path, class: "px-6 py-2.5 text-sm font-medium text-gray-600 hover:text-gray-800 transition" %>
+          <%= f.submit "投稿する", class: "px-8 py-2.5 bg-blue-600 text-white text-sm font-bold rounded-lg shadow-lg hover:bg-blue-700 hover:shadow-xl transform active:scale-95 transition cursor-pointer" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

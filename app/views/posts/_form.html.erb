@@ -1,0 +1,61 @@
+<%= form_with(model: post, class: "space-y-6", data: { controller: "post-form" }) do |f| %>
+  <% if post.errors.any? %>
+    <div class="alert alert-error shadow-lg mb-6">
+      <div>
+        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        <span>入力内容にエラーがあります。</span>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="form-control">
+    <%= f.label :category, "ソースタイプ", class: "label font-bold" %>
+    <div class="join">
+      <% Post.categories.keys.each do |category| %>
+        <%= f.radio_button :category, category, class: "join-item btn", data: { action: "change->post-form#toggleSource", post_form_target: "categoryInput" }, title: I18n.t("activerecord.enums.post.category.#{category}") %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Source Inputs -->
+  <div class="bg-base-200 p-4 rounded-xl border border-base-300">
+    <%= f.fields_for :source_attributes, (post.source || post.build_source) do |sf| %>
+      <div data-post-form-target="webFields" class="<%= post.web_page? ? '' : 'hidden' %> space-y-4">
+        <div class="form-control">
+          <%= sf.label :url, "URL", class: "label" %>
+          <%= sf.url_field :url, class: "input input-bordered w-full", placeholder: "https://example.com/..." %>
+        </div>
+      </div>
+
+      <div data-post-form-target="bookFields" class="<%= post.book? ? '' : 'hidden' %> space-y-4">
+        <div class="form-control">
+          <%= sf.label :title, "書籍タイトル", class: "label" %>
+          <%= sf.text_field :title, class: "input input-bordered w-full", placeholder: "本のタイトルを入力" %>
+        </div>
+        <div class="form-control">
+          <%= sf.label :author, "著者", class: "label" %>
+          <%= sf.text_field :author, class: "input input-bordered w-full", placeholder: "著者名" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="form-control mb-4">
+    <%= f.label :title, "タイトル", class: "label font-bold" %>
+    <%= f.text_field :title, class: "input input-bordered w-full text-lg font-bold", placeholder: "投稿のタイトルを入力してください" %>
+  </div>
+
+  <div class="form-control">
+    <%= f.label :content, "学びのメモ・アウトプット", class: "label font-bold" %>
+    <%= f.text_area :content, class: "textarea textarea-bordered h-48 text-lg", placeholder: "何を学びましたか？" %>
+  </div>
+
+  <div class="flex justify-between items-center">
+    <div class="form-control">
+      <%= f.label :status, "公開設定", class: "label cursor-pointer" %>
+      <%= f.select :status, Post.statuses.keys.map { |k| [I18n.t("activerecord.enums.post.status.#{k}"), k] }, {}, class: "select select-bordered" %>
+    </div>
+    
+    <%= f.submit "保存する", class: "btn btn-primary px-8" %>
+  </div>
+<% end %>

@@ -1,0 +1,11 @@
+ja:
+  enums:
+    post:
+      status:
+        public_post: "公開"
+        private_post: "非公開"
+        draft: "下書き"
+      source_type_enum:
+        web_page: "Webページ"
+        book: "書籍"
+        others: "その他"

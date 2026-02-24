@@ -1,0 +1,42 @@
+<div class="max-w-4xl mx-auto py-8">
+  <div class="flex justify-between items-start mb-8">
+    <div>
+      <%= link_to "← 戻る", posts_path, class: "btn btn-link px-0 mb-4" %>
+      <div class="flex items-center gap-2 mb-2">
+        <div class="badge badge-outline"><%= t("enums.post.source_type_enum.#{@post.source_type_enum}") %></div>
+        <div class="badge badge-ghost"><%= t("enums.post.status.#{@post.status}") %></div>
+      </div>
+      <h1 class="text-3xl font-bold"><%= @post.user.email %>の学び</h1>
+      <p class="text-sm opacity-60 mt-2">投稿日: <%= l @post.created_at, format: :long %></p>
+    </div>
+    
+    <% if @post.user == current_user %>
+      <div class="flex gap-2">
+        <%= link_to "編集", edit_post_path(@post), class: "btn btn-outline" %>
+        <%= button_to "削除", @post, method: :delete, class: "btn btn-outline btn-error", data: { turbo_confirm: "本当に削除しますか？" } %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="card bg-base-100 shadow-xl border border-base-200">
+    <div class="p-8">
+      <!-- Metadata Preview (Turbo Frame) -->
+      <%= turbo_stream_from "post_#{@post.id}" %>
+      
+      <% if @post.source %>
+        <div id="source_preview_<%= @post.id %>" class="mb-8">
+          <% if @post.web_page? %>
+            <%= render "posts/web_preview", metadata: @post.source %>
+          <% elsif @post.book? %>
+            <%= render "posts/book_preview", metadata: @post.source %>
+          <% end %>
+        </div>
+      <% end %>
+
+      <div class="prose prose-lg max-w-none">
+        <h1 class="text-3xl font-bold mb-4"><%= @post.title %></h1>
+        <%= simple_format @post.content %>
+      </div>
+    </div>
+  </div>
+</div>

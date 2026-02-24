@@ -1,0 +1,10 @@
+<div id="book_preview_<%= metadata.id %>" class="mt-4 p-4 border rounded-xl bg-base-200 flex gap-4">
+  <div class="flex-1">
+    <div class="badge badge-secondary mb-2">書籍情報</div>
+    <h3 class="font-bold text-lg"><%= metadata.title %></h3>
+    <p class="text-md text-base-content/80"><%= metadata.author %></p>
+    <% if metadata.ndc_label.present? %>
+      <p class="text-xs mt-2 opacity-70">カテゴリ: <%= metadata.ndc_label %></p>
+    <% end %>
+  </div>
+</div>
