@@ -1,94 +1,110 @@
-<div class="bg-gray-50 min-h-screen">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <div class="flex items-center justify-between mb-12">
-      <div>
-        <h1 class="text-4xl font-extrabold text-gray-900 tracking-tight">Learning Dashboard</h1>
-        <p class="mt-2 text-lg text-gray-600">AI時代に、あえて人間の学びを共有する。</p>
+<div class="qiita-container">
+  <div class="qiita-layout">
+    <!-- メイン：記事一覧 -->
+    <div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <h1 style="font-size:18px;font-weight:700;margin:0;">新着記事</h1>
       </div>
-      <%= link_to new_post_path, class: "inline-flex items-center px-6 py-3 border border-transparent text-base font-bold rounded-xl shadow-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition transform hover:-translate-y-1" do %>
-        新しい学びを投稿
-      <% end %>
+
+      <div>
+        <% @new_arrivals.each do |post| %>
+          <div class="qiita-article-card">
+            <div class="qiita-article-card__author">
+              <div class="qiita-article-card__avatar">
+                <%= post.user.email[0].upcase %>
+              </div>
+              <span class="qiita-article-card__username">
+                <%= post.user.email %>
+              </span>
+              <span class="qiita-article-card__date">
+                <%= time_ago_in_words(post.created_at) %>前
+              </span>
+            </div>
+
+            <h2 class="qiita-article-card__title">
+              <%= link_to post.title, post_path(post) %>
+            </h2>
+
+            <p class="qiita-article-card__excerpt">
+              <%= post.content %>
+            </p>
+
+            <% if post.source %>
+              <div style="background:#F9FAFB;border:1px solid var(--qiita-border);border-radius:4px;padding:10px 14px;margin-bottom:12px;">
+                <p style="font-size:13px;font-weight:700;margin:0 0 2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+                  <%= post.source.title.presence || post.source.url %>
+                </p>
+                <% if post.book? %>
+                  <p style="font-size:12px;color:var(--qiita-text-secondary);margin:0;">
+                    著者: <%= post.source.author.presence || '著者不明' %>
+                  </p>
+                <% else %>
+                  <p style="font-size:12px;color:var(--qiita-text-secondary);margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+                    <%= post.source.description.presence || post.source.url %>
+                  </p>
+                <% end %>
+              </div>
+            <% end %>
+
+            <div class="qiita-article-card__footer">
+              <span class="qiita-tag">
+                <%= t("enums.post.source_type_enum.#{post.source_type_enum}") %>
+              </span>
+              <%= render "posts/like_button", post: post %>
+            </div>
+          </div>
+        <% end %>
+
+        <% if @new_arrivals.empty? %>
+          <div class="qiita-card" style="text-align:center;padding:48px;color:var(--qiita-text-secondary);">
+            <p style="margin:0 0 16px;font-size:15px;">まだ投稿がありません</p>
+            <%= link_to "最初の学びを投稿する", new_post_path, class: "qiita-btn qiita-btn--primary" %>
+          </div>
+        <% end %>
+      </div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      <!-- New Arrivals -->
-      <div class="lg:col-span-2 space-y-6">
-        <h2 class="text-2xl font-bold text-gray-900">New Arrivals</h2>
-        <div class="grid gap-6">
-          <% @new_arrivals.each do |post| %>
-            <div class="bg-white rounded-2xl shadow-sm hover:shadow-md transition border border-gray-100 p-6">
-              <div class="flex items-start justify-between">
-                <div class="flex items-center text-sm font-bold text-gray-900">
-                  <div class="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 mr-2">
-                    <%= post.user.email[0].upcase %>
-                  </div>
-                  <%= post.user.email %>
-                </div>
-                <span class="px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100">
-                  <%= t("enums.post.source_type_enum.#{post.source_type_enum}") %>
-                </span>
-              </div>
-              <h3 class="mt-4 text-xl font-bold text-gray-900">
-                <%= link_to post.title, post_path(post), class: "hover:text-blue-600 transition" %>
-              </h3>
-              <p class="mt-2 text-gray-700 leading-relaxed line-clamp-3"><%= post.content %></p>
-              
-              <div class="mt-4 flex items-center space-x-4">
-                <%= render "posts/like_button", post: post %>
-              </div>
-              
-              <% if post.source %>
-                <div class="mt-4 p-4 bg-gray-50 rounded-xl border border-gray-100">
-                  <p class="text-sm font-bold text-gray-900"><%= post.source.title %></p>
-                  <% if post.book? %>
-                    <p class="text-xs text-gray-500 mt-1">著者: <%= post.source.author %></p>
-                  <% else %>
-                    <p class="text-xs text-gray-500 mt-1 line-clamp-1"><%= post.source.description %></p>
-                  <% end %>
-                </div>
-              <% end %>
-            </div>
-          <% end %>
-        </div>
-      </div>
-
-      <div class="space-y-8">
-        <!-- Trending Web Pages -->
-        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-          <h2 class="text-xl font-bold mb-4 flex items-center">
-             <svg class="h-5 w-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+    <!-- 右サイドバー -->
+    <aside>
+      <div class="qiita-sidebar-widget">
+        <h2 class="qiita-sidebar-widget__title">
+          <span style="display:flex;align-items:center;gap:6px;">
+            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
             </svg>
             Trending Web
-          </h2>
-          <ul class="space-y-4">
-            <% @trending_web_pages.each do |web| %>
-              <li class="group">
-                <p class="text-sm font-semibold text-gray-900 truncate group-hover:text-blue-600 transition"><%= web.title %></p>
-                <p class="text-xs text-gray-400 truncate"><%= web.url %></p>
-              </li>
-            <% end %>
-          </ul>
-        </div>
+          </span>
+        </h2>
+        <% @trending_web_pages.each do |web| %>
+          <div class="qiita-sidebar-item">
+            <span class="qiita-sidebar-item__title"><%= web.title.presence || web.url %></span>
+            <span class="qiita-sidebar-item__sub"><%= web.url %></span>
+          </div>
+        <% end %>
+        <% if @trending_web_pages.empty? %>
+          <p style="font-size:13px;color:var(--qiita-text-secondary);margin:0;">データなし</p>
+        <% end %>
+      </div>
 
-        <!-- Trending Books -->
-        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-          <h2 class="text-xl font-bold mb-4 flex items-center">
-            <svg class="h-5 w-5 mr-2 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+      <div class="qiita-sidebar-widget">
+        <h2 class="qiita-sidebar-widget__title">
+          <span style="display:flex;align-items:center;gap:6px;">
+            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
             </svg>
             Trending Books
-          </h2>
-          <ul class="space-y-4">
-            <% @trending_books.each do |book| %>
-              <li class="group">
-                <p class="text-sm font-semibold text-gray-900 truncate group-hover:text-purple-600 transition"><%= book.title %></p>
-                <p class="text-xs text-gray-400 truncate"><%= book.author %></p>
-              </li>
-            <% end %>
-          </ul>
-        </div>
+          </span>
+        </h2>
+        <% @trending_books.each do |book| %>
+          <div class="qiita-sidebar-item">
+            <span class="qiita-sidebar-item__title"><%= book.title %></span>
+            <span class="qiita-sidebar-item__sub"><%= book.author %></span>
+          </div>
+        <% end %>
+        <% if @trending_books.empty? %>
+          <p style="font-size:13px;color:var(--qiita-text-secondary);margin:0;">データなし</p>
+        <% end %>
       </div>
-    </div>
+    </aside>
   </div>
 </div>

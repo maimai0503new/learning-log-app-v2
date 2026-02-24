@@ -1,61 +1,83 @@
-<%= form_with(model: post, class: "space-y-6", data: { controller: "post-form" }) do |f| %>
+<%= form_with(model: post, class: "space-y-5", data: { controller: "post-form" }) do |f| %>
+
   <% if post.errors.any? %>
-    <div class="alert alert-error shadow-lg mb-6">
-      <div>
-        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-        <span>入力内容にエラーがあります。</span>
-      </div>
+    <div class="qiita-form-error">
+      入力内容にエラーがあります。修正してから再送信してください。
     </div>
   <% end %>
 
-  <div class="form-control">
-    <%= f.label :category, "ソースタイプ", class: "label font-bold" %>
-    <div class="join">
-      <% Post.categories.keys.each do |category| %>
-        <%= f.radio_button :category, category, class: "join-item btn", data: { action: "change->post-form#toggleSource", post_form_target: "categoryInput" }, title: I18n.t("activerecord.enums.post.category.#{category}") %>
-      <% end %>
+  <!-- 公開設定 & ソースタイプ -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+    <div class="qiita-form-row" style="margin-bottom:0;">
+      <label class="qiita-form-label"><%= f.label :status, "公開設定" %></label>
+      <%= f.select :status,
+          Post.statuses.keys.map { |k| [I18n.t("enums.post.status.#{k}"), k] },
+          {},
+          class: "qiita-form-select" %>
+    </div>
+
+    <div class="qiita-form-row" style="margin-bottom:0;">
+      <label class="qiita-form-label">ソースタイプ</label>
+      <%= f.select :source_type_enum,
+          Post.source_type_enums.keys.map { |k| [t("enums.post.source_type_enum.#{k}"), k] },
+          {},
+          class: "qiita-form-select",
+          data: { "post-form-target": "sourceType", action: "change->post-form#toggleFields" } %>
     </div>
   </div>
 
-  <!-- Source Inputs -->
-  <div class="bg-base-200 p-4 rounded-xl border border-base-300">
-    <%= f.fields_for :source_attributes, (post.source || post.build_source) do |sf| %>
-      <div data-post-form-target="webFields" class="<%= post.web_page? ? '' : 'hidden' %> space-y-4">
-        <div class="form-control">
-          <%= sf.label :url, "URL", class: "label" %>
-          <%= sf.url_field :url, class: "input input-bordered w-full", placeholder: "https://example.com/..." %>
-        </div>
+  <!-- Web URL フィールド -->
+  <div data-post-form-target="webFields" class="<%= post.web_page? ? '' : 'hidden' %> qiita-form-section">
+    <label class="qiita-form-label">WebページのURL</label>
+    <%= text_field_tag "post[source_attributes][url]",
+        (post.source.url if post.web_page? && post.source),
+        class: "qiita-form-input",
+        placeholder: "https://example.com" %>
+    <p class="qiita-form-hint">※ URLを入力すると、自動的にタイトルや画像を取得します。</p>
+  </div>
+
+  <!-- 書籍フィールド -->
+  <div data-post-form-target="bookFields" class="<%= post.book? ? '' : 'hidden' %> qiita-form-section">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div>
+        <label class="qiita-form-label">書籍タイトル</label>
+        <%= text_field_tag "post[source_attributes][title]",
+            (post.source.title if post.book? && post.source),
+            class: "qiita-form-input",
+            placeholder: "書籍名を入力" %>
       </div>
-
-      <div data-post-form-target="bookFields" class="<%= post.book? ? '' : 'hidden' %> space-y-4">
-        <div class="form-control">
-          <%= sf.label :title, "書籍タイトル", class: "label" %>
-          <%= sf.text_field :title, class: "input input-bordered w-full", placeholder: "本のタイトルを入力" %>
-        </div>
-        <div class="form-control">
-          <%= sf.label :author, "著者", class: "label" %>
-          <%= sf.text_field :author, class: "input input-bordered w-full", placeholder: "著者名" %>
-        </div>
+      <div>
+        <label class="qiita-form-label">著者名</label>
+        <%= text_field_tag "post[source_attributes][author]",
+            (post.source.author if post.book? && post.source),
+            class: "qiita-form-input",
+            placeholder: "著者名を入力" %>
       </div>
-    <% end %>
-  </div>
-
-  <div class="form-control mb-4">
-    <%= f.label :title, "タイトル", class: "label font-bold" %>
-    <%= f.text_field :title, class: "input input-bordered w-full text-lg font-bold", placeholder: "投稿のタイトルを入力してください" %>
-  </div>
-
-  <div class="form-control">
-    <%= f.label :content, "学びのメモ・アウトプット", class: "label font-bold" %>
-    <%= f.text_area :content, class: "textarea textarea-bordered h-48 text-lg", placeholder: "何を学びましたか？" %>
-  </div>
-
-  <div class="flex justify-between items-center">
-    <div class="form-control">
-      <%= f.label :status, "公開設定", class: "label cursor-pointer" %>
-      <%= f.select :status, Post.statuses.keys.map { |k| [I18n.t("activerecord.enums.post.status.#{k}"), k] }, {}, class: "select select-bordered" %>
     </div>
-    
-    <%= f.submit "保存する", class: "btn btn-primary px-8" %>
+  </div>
+
+  <!-- タイトル -->
+  <div class="qiita-form-row">
+    <label class="qiita-form-label">タイトル <span style="color:#DC3545;">*</span></label>
+    <%= f.text_field :title,
+        class: "qiita-form-input",
+        placeholder: "投稿のタイトルを入力してください",
+        style: "font-size:16px;font-weight:700;" %>
+  </div>
+
+  <!-- 本文 -->
+  <div class="qiita-form-row">
+    <label class="qiita-form-label">学びのメモ・アウトプット <span style="color:#DC3545;">*</span></label>
+    <%= f.text_area :content,
+        class: "qiita-form-textarea",
+        rows: 10,
+        placeholder: "何を学び、どう感じましたか？" %>
+  </div>
+
+  <!-- 送信 -->
+  <div style="display:flex;align-items:center;justify-content:flex-end;gap:12px;padding-top:16px;border-top:1px solid var(--qiita-border);">
+    <%= link_to "キャンセル", posts_path,
+        style: "font-size:14px;color:var(--qiita-text-secondary);text-decoration:none;" %>
+    <%= f.submit "保存する", class: "qiita-btn qiita-btn--primary", style: "font-size:14px;padding:9px 24px;" %>
   </div>
 <% end %>

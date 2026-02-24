@@ -1,42 +1,89 @@
-<div class="max-w-4xl mx-auto py-8">
-  <div class="flex justify-between items-start mb-8">
-    <div>
-      <%= link_to "← 戻る", posts_path, class: "btn btn-link px-0 mb-4" %>
-      <div class="flex items-center gap-2 mb-2">
-        <div class="badge badge-outline"><%= t("enums.post.source_type_enum.#{@post.source_type_enum}") %></div>
-        <div class="badge badge-ghost"><%= t("enums.post.status.#{@post.status}") %></div>
-      </div>
-      <h1 class="text-3xl font-bold"><%= @post.user.email %>の学び</h1>
-      <p class="text-sm opacity-60 mt-2">投稿日: <%= l @post.created_at, format: :long %></p>
-    </div>
-    
-    <% if @post.user == current_user %>
-      <div class="flex gap-2">
-        <%= link_to "編集", edit_post_path(@post), class: "btn btn-outline" %>
-        <%= button_to "削除", @post, method: :delete, class: "btn btn-outline btn-error", data: { turbo_confirm: "本当に削除しますか？" } %>
-      </div>
-    <% end %>
-  </div>
+<!-- Qiita風記事詳細：左サイドバー + 本文 の2カラムレイアウト -->
+<div class="qiita-layout--article">
 
-  <div class="card bg-base-100 shadow-xl border border-base-200">
-    <div class="p-8">
-      <!-- Metadata Preview (Turbo Frame) -->
-      <%= turbo_stream_from "post_#{@post.id}" %>
-      
-      <% if @post.source %>
-        <div id="source_preview_<%= @post.id %>" class="mb-8">
-          <% if @post.web_page? %>
-            <%= render "posts/web_preview", metadata: @post.source %>
-          <% elsif @post.book? %>
-            <%= render "posts/book_preview", metadata: @post.source %>
-          <% end %>
-        </div>
+  <!-- 左サイドバー（いいね・アクション） -->
+  <aside class="qiita-article-sidebar">
+    <%= render "posts/like_button", post: @post %>
+
+    <% if @post.user == current_user %>
+      <%= link_to edit_post_path(@post), class: "qiita-btn qiita-btn--ghost",
+          style: "display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px;border-radius:50%;border:1px solid var(--qiita-border);font-size:11px;" do %>
+        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+        </svg>
+        編集
       <% end %>
 
-      <div class="prose prose-lg max-w-none">
-        <h1 class="text-3xl font-bold mb-4"><%= @post.title %></h1>
-        <%= simple_format @post.content %>
+      <%= button_to @post, method: :delete,
+          class: "qiita-btn qiita-btn--ghost",
+          style: "display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px;border-radius:50%;border:1px solid #F5C6CB;color:#DC3545;font-size:11px;background:none;cursor:pointer;",
+          data: { turbo_confirm: "本当に削除しますか？" } do %>
+        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+        </svg>
+        削除
+      <% end %>
+    <% end %>
+  </aside>
+
+  <!-- メイン：記事本文 -->
+  <article>
+    <!-- 戻るリンク -->
+    <%= link_to "← タイムラインに戻る", posts_path,
+        style: "font-size:13px;color:var(--qiita-text-secondary);text-decoration:none;display:inline-block;margin-bottom:16px;" %>
+
+    <!-- 記事ヘッダー -->
+    <div class="qiita-article-header">
+      <!-- ステータス・タグ -->
+      <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;">
+        <span class="qiita-tag">
+          <%= t("enums.post.source_type_enum.#{@post.source_type_enum}") %>
+        </span>
+        <% if @post.status != "public_post" %>
+          <span class="qiita-badge <%= @post.status == 'draft' ? 'qiita-badge--draft' : 'qiita-badge--private' %>">
+            <%= t("enums.post.status.#{@post.status}") %>
+          </span>
+        <% end %>
+      </div>
+
+      <h1 class="qiita-article-header__title"><%= @post.title %></h1>
+
+      <div class="qiita-article-header__meta">
+        <div class="qiita-article-header__author">
+          <div class="qiita-article-header__avatar">
+            <%= @post.user.email[0].upcase %>
+          </div>
+          <div>
+            <span style="font-size:14px;font-weight:700;color:var(--qiita-text);">
+              <%= @post.user.email %>
+            </span>
+            <br>
+            <span style="font-size:12px;color:var(--qiita-text-secondary);">
+              投稿日: <%= l @post.created_at, format: :long %>
+            </span>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
+
+    <!-- ソースプレビュー (Turbo Stream対応) -->
+    <%= turbo_stream_from "post_#{@post.id}" %>
+
+    <% if @post.source %>
+      <div id="source_preview_<%= @post.id %>" style="margin-bottom:24px;">
+        <% if @post.web_page? %>
+          <%= render "posts/web_preview", metadata: @post.source %>
+        <% elsif @post.book? %>
+          <%= render "posts/book_preview", metadata: @post.source %>
+        <% end %>
+      </div>
+    <% end %>
+
+    <!-- 記事本文 -->
+    <div class="qiita-prose">
+      <%= simple_format @post.content %>
+    </div>
+  </article>
 </div>

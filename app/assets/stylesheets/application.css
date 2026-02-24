@@ -1,10 +1,958 @@
 /*
- * This is a manifest file that'll be compiled into application.css.
- *
- * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
- * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
- * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
- * depending on specificity.
- *
- * Consider organizing styles into separate files for maintainability.
+ * Qiita-inspired design system
+ * Primary color: #55C500 (Qiita Green)
+ * Background: #F5F5F5
+ * Font: Noto Sans JP
  */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap');
+
+/* ============================================================
+   CSS Custom Properties
+   ============================================================ */
+:root {
+    --qiita-green: #55C500;
+    --qiita-green-dark: #47A200;
+    --qiita-green-light: #EBF8D8;
+    --qiita-bg: #F5F5F5;
+    --qiita-white: #FFFFFF;
+    --qiita-border: #E0E0E0;
+    --qiita-text: #333333;
+    --qiita-text-secondary: #828282;
+    --qiita-text-link: #0F83FD;
+    --qiita-header-height: 60px;
+    --qiita-radius: 4px;
+    --qiita-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    --qiita-shadow-hover: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+/* ============================================================
+   Base Reset
+   ============================================================ */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background-color: var(--qiita-bg);
+    color: var(--qiita-text);
+    line-height: 1.7;
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    color: var(--qiita-text-link);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* ============================================================
+   Qiita Header
+   ============================================================ */
+.qiita-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    height: var(--qiita-header-height);
+    background-color: var(--qiita-white);
+    border-bottom: 1px solid var(--qiita-border);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+}
+
+.qiita-header__inner {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.qiita-header__logo {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--qiita-green) !important;
+    text-decoration: none !important;
+    flex-shrink: 0;
+}
+
+.qiita-header__logo:hover {
+    text-decoration: none !important;
+    opacity: 0.85;
+}
+
+.qiita-header__spacer {
+    flex: 1;
+}
+
+.qiita-header__nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.qiita-header__nav a {
+    font-size: 14px;
+    color: var(--qiita-text);
+    padding: 6px 10px;
+    border-radius: var(--qiita-radius);
+    text-decoration: none;
+    transition: background-color 0.15s;
+}
+
+.qiita-header__nav a:hover {
+    background-color: var(--qiita-bg);
+    text-decoration: none;
+}
+
+/* ============================================================
+   Qiita Buttons
+   ============================================================ */
+.qiita-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 7px 16px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none !important;
+    transition: background-color 0.15s, opacity 0.15s;
+    border: none;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.qiita-btn:hover {
+    text-decoration: none !important;
+}
+
+.qiita-btn--primary {
+    background-color: var(--qiita-green);
+    color: #fff !important;
+}
+
+.qiita-btn--primary:hover {
+    background-color: var(--qiita-green-dark);
+    color: #fff !important;
+}
+
+.qiita-btn--outline {
+    background-color: transparent;
+    color: var(--qiita-green) !important;
+    border: 1px solid var(--qiita-green);
+}
+
+.qiita-btn--outline:hover {
+    background-color: var(--qiita-green-light);
+}
+
+.qiita-btn--ghost {
+    background-color: transparent;
+    color: var(--qiita-text-secondary) !important;
+    border: 1px solid var(--qiita-border);
+}
+
+.qiita-btn--ghost:hover {
+    background-color: var(--qiita-bg);
+}
+
+.qiita-btn--danger {
+    background-color: transparent;
+    color: #DC3545 !important;
+    border: 1px solid #DC3545;
+}
+
+.qiita-btn--danger:hover {
+    background-color: #FFF0F0;
+}
+
+/* ============================================================
+   Qiita Layout Container
+   ============================================================ */
+.qiita-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 16px;
+}
+
+.qiita-layout {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 24px;
+    align-items: start;
+}
+
+.qiita-layout--wide {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px 16px;
+}
+
+.qiita-layout--article {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 24px;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px 16px;
+    align-items: start;
+}
+
+@media (max-width: 768px) {
+    .qiita-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .qiita-layout--article {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ============================================================
+   Qiita Card (記事カード)
+   ============================================================ */
+.qiita-card {
+    background-color: var(--qiita-white);
+    border: 1px solid var(--qiita-border);
+    border-radius: var(--qiita-radius);
+    padding: 20px 24px;
+    transition: box-shadow 0.15s;
+}
+
+.qiita-card:hover {
+    box-shadow: var(--qiita-shadow-hover);
+}
+
+.qiita-card+.qiita-card {
+    margin-top: 12px;
+}
+
+/* ============================================================
+   Qiita Article Card (一覧)
+   ============================================================ */
+.qiita-article-card {
+    background-color: var(--qiita-white);
+    border: 1px solid var(--qiita-border);
+    border-radius: var(--qiita-radius);
+    padding: 20px 24px;
+    transition: box-shadow 0.15s;
+    margin-bottom: 12px;
+}
+
+.qiita-article-card:hover {
+    box-shadow: var(--qiita-shadow-hover);
+}
+
+.qiita-article-card__author {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.qiita-article-card__avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: var(--qiita-green);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.qiita-article-card__username {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--qiita-text);
+    text-decoration: none;
+}
+
+.qiita-article-card__username:hover {
+    text-decoration: underline;
+}
+
+.qiita-article-card__date {
+    font-size: 12px;
+    color: var(--qiita-text-secondary);
+}
+
+.qiita-article-card__title {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 8px;
+    line-height: 1.4;
+}
+
+.qiita-article-card__title a {
+    color: var(--qiita-text);
+    text-decoration: none;
+}
+
+.qiita-article-card__title a:hover {
+    color: var(--qiita-green);
+    text-decoration: none;
+}
+
+.qiita-article-card__excerpt {
+    font-size: 13px;
+    color: var(--qiita-text-secondary);
+    line-height: 1.6;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    margin-bottom: 12px;
+}
+
+.qiita-article-card__footer {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+/* ============================================================
+   Qiita Tag / Badge
+   ============================================================ */
+.qiita-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    background-color: var(--qiita-green-light);
+    color: var(--qiita-green-dark);
+    border-radius: 2px;
+    font-size: 12px;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.qiita-tag:hover {
+    background-color: #d5f0a8;
+    text-decoration: none;
+}
+
+.qiita-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    background-color: #F0F0F0;
+    color: var(--qiita-text-secondary);
+    border-radius: 2px;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.qiita-badge--draft {
+    background-color: #FFF3CD;
+    color: #856404;
+}
+
+.qiita-badge--private {
+    background-color: #F8D7DA;
+    color: #842029;
+}
+
+/* ============================================================
+   Qiita Like Button
+   ============================================================ */
+.qiita-like-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 10px;
+    border-radius: 50%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.15s;
+    color: var(--qiita-text-secondary);
+    text-decoration: none !important;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.qiita-like-btn:hover {
+    background-color: #FFF0F0;
+    color: #e5534b;
+    text-decoration: none !important;
+}
+
+.qiita-like-btn--active {
+    color: #e5534b;
+}
+
+.qiita-like-btn--active:hover {
+    background-color: #FFF0F0;
+}
+
+.qiita-like-inline {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    color: var(--qiita-text-secondary);
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: none;
+    background: none;
+    text-decoration: none !important;
+    transition: background-color 0.15s, color 0.15s;
+}
+
+.qiita-like-inline:hover {
+    background-color: #FFF0F0;
+    color: #e5534b;
+    text-decoration: none !important;
+}
+
+.qiita-like-inline--active {
+    color: #e5534b;
+}
+
+/* ============================================================
+   Qiita Article Sidebar (左固定サイドバー)
+   ============================================================ */
+.qiita-article-sidebar {
+    position: sticky;
+    top: calc(var(--qiita-header-height) + 16px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+/* ============================================================
+   Qiita Article Header
+   ============================================================ */
+.qiita-article-header {
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--qiita-border);
+}
+
+.qiita-article-header__title {
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.4;
+    margin: 0 0 16px;
+    color: var(--qiita-text);
+}
+
+.qiita-article-header__meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.qiita-article-header__author {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.qiita-article-header__avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: var(--qiita-green);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+/* ============================================================
+   Qiita Prose (記事本文)
+   ============================================================ */
+.qiita-prose {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--qiita-text);
+}
+
+.qiita-prose p {
+    margin: 0 0 1em;
+}
+
+.qiita-prose h1,
+.qiita-prose h2,
+.qiita-prose h3 {
+    font-weight: 700;
+    margin: 1.5em 0 0.5em;
+    line-height: 1.3;
+}
+
+.qiita-prose h2 {
+    font-size: 22px;
+    border-bottom: 1px solid var(--qiita-border);
+    padding-bottom: 8px;
+}
+
+.qiita-prose h3 {
+    font-size: 18px;
+}
+
+.qiita-prose code {
+    background-color: #F9F2F4;
+    color: #C7254E;
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-size: 13px;
+}
+
+.qiita-prose pre {
+    background-color: #1E1E1E;
+    color: #D4D4D4;
+    padding: 16px;
+    border-radius: 4px;
+    overflow-x: auto;
+    margin: 1em 0;
+}
+
+/* ============================================================
+   Qiita Form
+   ============================================================ */
+.qiita-form-page {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 32px 16px;
+}
+
+.qiita-form-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0 0 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--qiita-border);
+    color: var(--qiita-text);
+}
+
+.qiita-form-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--qiita-text);
+    margin-bottom: 6px;
+}
+
+.qiita-form-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--qiita-border);
+    border-radius: var(--qiita-radius);
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--qiita-text);
+    background-color: var(--qiita-white);
+    transition: border-color 0.15s, box-shadow 0.15s;
+    outline: none;
+}
+
+.qiita-form-input:focus {
+    border-color: var(--qiita-green);
+    box-shadow: 0 0 0 3px rgba(85, 197, 0, 0.15);
+}
+
+.qiita-form-select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--qiita-border);
+    border-radius: var(--qiita-radius);
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--qiita-text);
+    background-color: var(--qiita-white);
+    transition: border-color 0.15s;
+    outline: none;
+    cursor: pointer;
+}
+
+.qiita-form-select:focus {
+    border-color: var(--qiita-green);
+    box-shadow: 0 0 0 3px rgba(85, 197, 0, 0.15);
+}
+
+.qiita-form-textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--qiita-border);
+    border-radius: var(--qiita-radius);
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--qiita-text);
+    background-color: var(--qiita-white);
+    resize: vertical;
+    transition: border-color 0.15s;
+    outline: none;
+    line-height: 1.7;
+}
+
+.qiita-form-textarea:focus {
+    border-color: var(--qiita-green);
+    box-shadow: 0 0 0 3px rgba(85, 197, 0, 0.15);
+}
+
+.qiita-form-section {
+    background-color: #FAFAFA;
+    border: 1px solid var(--qiita-border);
+    border-radius: var(--qiita-radius);
+    padding: 16px;
+    margin-bottom: 20px;
+}
+
+.qiita-form-row {
+    margin-bottom: 20px;
+}
+
+.qiita-form-hint {
+    font-size: 12px;
+    color: var(--qiita-text-secondary);
+    margin-top: 4px;
+}
+
+.qiita-form-error {
+    border-left: 4px solid #DC3545;
+    background-color: #FFF0F0;
+    padding: 12px 16px;
+    border-radius: 0 4px 4px 0;
+    margin-bottom: 20px;
+    font-size: 13px;
+    color: #DC3545;
+}
+
+/* ============================================================
+   Qiita Right Sidebar
+   ============================================================ */
+.qiita-sidebar-widget {
+    background-color: var(--qiita-white);
+    border: 1px solid var(--qiita-border);
+    border-radius: var(--qiita-radius);
+    padding: 16px;
+    margin-bottom: 16px;
+    overflow: hidden;
+}
+
+.qiita-sidebar-widget__title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--qiita-text);
+    margin: 0 0 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--qiita-border);
+}
+
+.qiita-sidebar-item {
+    padding: 8px 0;
+    border-bottom: 1px solid #F5F5F5;
+    font-size: 13px;
+    overflow: hidden;
+    min-width: 0;
+}
+
+.qiita-sidebar-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.qiita-sidebar-item__title {
+    font-weight: 500;
+    color: var(--qiita-text);
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.qiita-sidebar-item__sub {
+    color: var(--qiita-text-secondary);
+    font-size: 11px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ============================================================
+   Qiita Link Preview
+   ============================================================ */
+.qiita-link-preview {
+    border: 1px solid var(--qiita-border);
+    border-radius: var(--qiita-radius);
+    overflow: hidden;
+    background-color: var(--qiita-white);
+    margin: 16px 0;
+    display: flex;
+    transition: box-shadow 0.15s;
+}
+
+.qiita-link-preview:hover {
+    box-shadow: var(--qiita-shadow-hover);
+}
+
+.qiita-link-preview__image {
+    width: 120px;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.qiita-link-preview__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.qiita-link-preview__body {
+    padding: 12px 16px;
+    flex: 1;
+    min-width: 0;
+}
+
+.qiita-link-preview__title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--qiita-text);
+    margin: 0 0 4px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.qiita-link-preview__desc {
+    font-size: 12px;
+    color: var(--qiita-text-secondary);
+    margin: 0 0 8px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.qiita-link-preview__url {
+    font-size: 11px;
+    color: var(--qiita-text-secondary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.qiita-link-preview--loading {
+    padding: 20px;
+    justify-content: center;
+    align-items: center;
+    color: var(--qiita-text-secondary);
+    font-size: 13px;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* ============================================================
+   Qiita Book Preview
+   ============================================================ */
+.qiita-book-preview {
+    border: 1px solid var(--qiita-border);
+    border-radius: var(--qiita-radius);
+    padding: 16px;
+    background-color: var(--qiita-white);
+    margin: 16px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.qiita-book-preview__icon {
+    width: 40px;
+    height: 40px;
+    background-color: #7952B3;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: #fff;
+}
+
+.qiita-book-preview__info {
+    flex: 1;
+    min-width: 0;
+}
+
+.qiita-book-preview__badge {
+    display: inline-block;
+    padding: 2px 6px;
+    background-color: #EDE7F6;
+    color: #5E35B1;
+    border-radius: 2px;
+    font-size: 11px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.qiita-book-preview__title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--qiita-text);
+    margin: 0 0 4px;
+}
+
+.qiita-book-preview__author {
+    font-size: 13px;
+    color: var(--qiita-text-secondary);
+}
+
+.qiita-book-preview__category {
+    font-size: 11px;
+    color: var(--qiita-text-secondary);
+    margin-top: 4px;
+}
+
+/* ============================================================
+   Alert / Flash Messages
+   ============================================================ */
+.qiita-flash {
+    padding: 12px 16px;
+    border-radius: var(--qiita-radius);
+    font-size: 14px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.qiita-flash--success {
+    background-color: var(--qiita-green-light);
+    color: #2D6A00;
+    border: 1px solid #B8E898;
+}
+
+.qiita-flash--error {
+    background-color: #FFF0F0;
+    color: #DC3545;
+    border: 1px solid #F5C6CB;
+}
+
+/* ============================================================
+   Utility
+   ============================================================ */
+.hidden {
+    display: none !important;
+}
+
+.text-muted {
+    color: var(--qiita-text-secondary);
+}
+
+.font-bold {
+    font-weight: 700;
+}
+
+.text-sm {
+    font-size: 13px;
+}
+
+.text-xs {
+    font-size: 11px;
+}
+
+.flex {
+    display: flex;
+}
+
+.items-center {
+    align-items: center;
+}
+
+.gap-2 {
+    gap: 8px;
+}
+
+.gap-4 {
+    gap: 16px;
+}
+
+.mt-2 {
+    margin-top: 8px;
+}
+
+.mt-4 {
+    margin-top: 16px;
+}
+
+.mb-2 {
+    margin-bottom: 8px;
+}
+
+.mb-4 {
+    margin-bottom: 16px;
+}
+
+.w-full {
+    width: 100%;
+}
+
+/* ============================================================
+   Source Category Radio Buttons (フォーム用)
+   ============================================================ */
+.qiita-radio-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.qiita-radio-item {
+    position: relative;
+}
+
+.qiita-radio-item input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.qiita-radio-item label {
+    display: inline-block;
+    padding: 6px 14px;
+    border: 1px solid var(--qiita-border);
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: border-color 0.15s, background-color 0.15s;
+    color: var(--qiita-text);
+}
+
+.qiita-radio-item input[type="radio"]:checked+label {
+    border-color: var(--qiita-green);
+    background-color: var(--qiita-green-light);
+    color: var(--qiita-green-dark);
+    font-weight: 700;
+}
+
+.qiita-radio-item label:hover {
+    border-color: var(--qiita-green);
+    background-color: var(--qiita-green-light);
+}

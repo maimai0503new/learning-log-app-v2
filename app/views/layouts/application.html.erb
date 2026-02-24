@@ -1,64 +1,71 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Learning Log App V3" %></title>
+    <title><%= content_for(:title) || "Learning Log" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="Learning Log App V3">
+    <meta name="application-name" content="Learning Log">
     <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
     <%= yield :head %>
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="bg-base-200 min-h-screen">
-    <header class="navbar bg-base-100 shadow-sm mb-8">
-      <div class="flex-1">
-        <a href="/" class="btn btn-ghost text-xl">Learning Log</a>
-      </div>
-      <div class="flex-none">
-        <ul class="menu menu-horizontal px-1">
+  <body>
+    <!-- Qiita風ヘッダー -->
+    <header class="qiita-header">
+      <div class="qiita-header__inner">
+        <a href="/" class="qiita-header__logo">LearningLog</a>
+        <div class="qiita-header__spacer"></div>
+        <nav class="qiita-header__nav">
           <% if user_signed_in? %>
-            <li><%= link_to "プロフィール", edit_user_registration_path %></li>
-            <li><%= button_to "ログアウト", destroy_user_session_path, method: :delete, class: "text-error" %></li>
+            <%= link_to "タイムライン", posts_path %>
+            <%= link_to "プロフィール", edit_user_registration_path %>
+            <%= button_to "ログアウト", destroy_user_session_path, method: :delete,
+                class: "qiita-btn qiita-btn--ghost" %>
+            <%= link_to "新規投稿", new_post_path, class: "qiita-btn qiita-btn--primary" %>
           <% else %>
-            <li><%= link_to "新規登録", new_user_registration_path %></li>
-            <li><%= link_to "ログイン", new_user_session_path %></li>
+            <%= link_to "新規登録", new_user_registration_path %>
+            <%= link_to "ログイン", new_user_session_path, class: "qiita-btn qiita-btn--primary" %>
           <% end %>
-        </ul>
+        </nav>
       </div>
     </header>
 
-    <main class="container mx-auto px-4 max-w-4xl">
-      <% if notice %>
-        <div class="alert alert-success mb-4 shadow-lg">
-          <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-          <span><%= notice %></span>
+    <!-- フラッシュメッセージ -->
+    <% if notice %>
+      <div style="max-width:1200px;margin:12px auto;padding:0 16px;">
+        <div class="qiita-flash qiita-flash--success">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+          </svg>
+          <%= notice %>
         </div>
-      <% end %>
-
-      <% if alert %>
-        <div class="alert alert-error mb-4 shadow-lg">
-          <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-          <span><%= alert %></span>
-        </div>
-      <% end %>
-
-      <div class="card bg-base-100 shadow-xl p-8">
-        <%= yield %>
       </div>
+    <% end %>
+
+    <% if alert %>
+      <div style="max-width:1200px;margin:12px auto;padding:0 16px;">
+        <div class="qiita-flash qiita-flash--error">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+          </svg>
+          <%= alert %>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- メインコンテンツ -->
+    <main>
+      <%= yield %>
     </main>
   </body>
 </html>

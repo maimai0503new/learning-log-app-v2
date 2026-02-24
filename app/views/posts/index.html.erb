@@ -1,72 +1,62 @@
-<div class="max-w-5xl mx-auto py-8">
-  <div class="flex justify-between items-center mb-12">
-    <h1 class="text-4xl font-extrabold tracking-tight">タイムライン</h1>
-    <%= link_to "新しい学びを記録する", new_post_path, class: "btn btn-primary btn-lg shadow-lg" %>
+<div class="qiita-container">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+    <h1 style="font-size:20px;font-weight:700;margin:0;">タイムライン</h1>
+    <%= link_to "新しい学びを記録する", new_post_path, class: "qiita-btn qiita-btn--primary" %>
   </div>
 
-  <div class="grid gap-8">
+  <div style="max-width:760px;">
     <% @posts.each do |post| %>
-      <div class="card bg-base-100 shadow-hover border border-base-200 transition-all hover:shadow-xl">
-        <div class="card-body p-8">
-          <div class="flex justify-between items-start mb-4">
-            <div class="flex items-center gap-3">
-              <div class="avatar placeholder">
-                <div class="bg-neutral text-neutral-content rounded-full w-8">
-                  <span><%= post.user.email[0].upcase %></span>
-                </div>
-              </div>
-              <div>
-                <p class="font-bold"><%= post.user.email %></p>
-                <p class="text-xs opacity-50"><%= time_ago_in_words(post.created_at) %>前</p>
-              </div>
-            </div>
-            <div class="badge badge-outline"><%= t("enums.post.source_type_enum.#{post.source_type_enum}") %></div>
+      <div class="qiita-article-card">
+        <div class="qiita-article-card__author">
+          <div class="qiita-article-card__avatar">
+            <%= post.user.email[0].upcase %>
           </div>
-
-          <h2 class="card-title text-2xl font-bold mb-2">
-            <%= link_to post_path(post), class: "hover:text-primary transition-colors" do %>
-              <%= post.title %>
-            <% end %>
-          </h2>
-          <p class="text-base-content/70 mb-4 line-clamp-3">
-            <%= post.content %>
-          </p>
-
-          <% if post.source %>
-            <div class="mb-4 bg-base-200/50 rounded-lg p-3 border border-base-200">
-              <% if post.web_page? %>
-                <div class="flex flex-col gap-1">
-                  <% if post.source.title.present? %>
-                    <div class="font-bold text-sm text-base-content line-clamp-2">
-                      <%= post.source.title %>
-                    </div>
-                  <% end %>
-                  <div class="flex items-center gap-2 text-primary text-xs font-medium">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.172 13.828a4 4 0 015.656 0l4-4a4 4 0 11-5.656-5.656l-1.102 1.101" /></svg>
-                    <span class="truncate"><%= post.source.url %></span>
-                  </div>
-                </div>
-              <% elsif post.book? %>
-                <div class="flex flex-col gap-1">
-                  <div class="font-bold text-sm text-base-content line-clamp-2">
-                    <%= post.source.title %>
-                  </div>
-                  <div class="flex items-center gap-2 text-secondary text-xs font-medium">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
-                    <span class="truncate"><%= post.source.author.presence || '著者不明' %></span>
-                  </div>
-                </div>
-              <% end %>
-            </div>
-          <% end %>
-
-          <div class="card-actions justify-end mt-4">
-            <div class="flex gap-4">
-              <span class="flex items-center gap-1 opacity-50"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg> 0</span>
-              <span class="flex items-center gap-1 opacity-50"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.268 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg> 0</span>
-            </div>
-          </div>
+          <span class="qiita-article-card__username">
+            <%= post.user.email %>
+          </span>
+          <span class="qiita-article-card__date">
+            <%= time_ago_in_words(post.created_at) %>前
+          </span>
         </div>
+
+        <h2 class="qiita-article-card__title">
+          <%= link_to post.title, post_path(post) %>
+        </h2>
+
+        <p class="qiita-article-card__excerpt">
+          <%= post.content %>
+        </p>
+
+        <% if post.source %>
+          <div style="background:#F9FAFB;border:1px solid var(--qiita-border);border-radius:4px;padding:10px 14px;margin-bottom:12px;">
+            <p style="font-size:13px;font-weight:700;margin:0 0 2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+              <%= post.source.title.presence || post.source.url %>
+            </p>
+            <% if post.book? %>
+              <p style="font-size:12px;color:var(--qiita-text-secondary);margin:0;">
+                著者: <%= post.source.author.presence || '著者不明' %>
+              </p>
+            <% else %>
+              <p style="font-size:12px;color:var(--qiita-text-secondary);margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+                <%= post.source.url %>
+              </p>
+            <% end %>
+          </div>
+        <% end %>
+
+        <div class="qiita-article-card__footer">
+          <span class="qiita-tag">
+            <%= t("enums.post.source_type_enum.#{post.source_type_enum}") %>
+          </span>
+          <%= render "posts/like_button", post: post %>
+        </div>
+      </div>
+    <% end %>
+
+    <% if @posts.empty? %>
+      <div class="qiita-card" style="text-align:center;padding:48px;color:var(--qiita-text-secondary);">
+        <p style="margin:0 0 16px;font-size:15px;">まだ投稿がありません</p>
+        <%= link_to "最初の学びを投稿する", new_post_path, class: "qiita-btn qiita-btn--primary" %>
       </div>
     <% end %>
   </div>
