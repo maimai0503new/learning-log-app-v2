@@ -71,3 +71,4 @@ group :test do
 end
 
 gem "metainspector", "~> 5.17"
+gem "redcarpet"

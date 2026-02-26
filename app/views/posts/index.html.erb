@@ -24,7 +24,7 @@
         </h2>
 
         <p class="qiita-article-card__excerpt">
-          <%= post.content %>
+          <%= markdown_to_plain_text(post.content) %>
         </p>
 
         <% if post.source %>

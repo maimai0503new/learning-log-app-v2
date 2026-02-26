@@ -59,7 +59,7 @@
 
     <!-- 記事本文 -->
     <div class="qiita-prose">
-      <%= simple_format @post.content %>
+      <%= markdown(@post.content) %>
     </div>
   </article>
 </div>

@@ -484,7 +484,7 @@ a:hover {
 }
 
 /* ============================================================
-   Qiita Prose (記事本文)
+   Qiita Prose (記事本文 - Markdown対応)
    ============================================================ */
 .qiita-prose {
     font-size: 15px;
@@ -498,10 +498,17 @@ a:hover {
 
 .qiita-prose h1,
 .qiita-prose h2,
-.qiita-prose h3 {
+.qiita-prose h3,
+.qiita-prose h4 {
     font-weight: 700;
     margin: 1.5em 0 0.5em;
     line-height: 1.3;
+}
+
+.qiita-prose h1 {
+    font-size: 26px;
+    border-bottom: 2px solid var(--qiita-border);
+    padding-bottom: 8px;
 }
 
 .qiita-prose h2 {
@@ -514,12 +521,17 @@ a:hover {
     font-size: 18px;
 }
 
+.qiita-prose h4 {
+    font-size: 16px;
+}
+
 .qiita-prose code {
     background-color: #F9F2F4;
     color: #C7254E;
     padding: 2px 5px;
     border-radius: 3px;
     font-size: 13px;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
 }
 
 .qiita-prose pre {
@@ -529,6 +541,109 @@ a:hover {
     border-radius: 4px;
     overflow-x: auto;
     margin: 1em 0;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.qiita-prose pre code {
+    background-color: transparent;
+    color: inherit;
+    padding: 0;
+    border-radius: 0;
+    font-size: inherit;
+}
+
+/* リスト */
+.qiita-prose ul,
+.qiita-prose ol {
+    padding-left: 1.5em;
+    margin: 0 0 1em;
+}
+
+.qiita-prose ul {
+    list-style-type: disc;
+}
+
+.qiita-prose ol {
+    list-style-type: decimal;
+}
+
+.qiita-prose li {
+    margin-bottom: 0.25em;
+}
+
+.qiita-prose li>ul,
+.qiita-prose li>ol {
+    margin-top: 0.25em;
+    margin-bottom: 0;
+}
+
+/* 引用 */
+.qiita-prose blockquote {
+    border-left: 4px solid var(--qiita-green);
+    margin: 1em 0;
+    padding: 8px 16px;
+    color: var(--qiita-text-secondary);
+    background-color: #FAFAFA;
+    border-radius: 0 4px 4px 0;
+}
+
+.qiita-prose blockquote p:last-child {
+    margin-bottom: 0;
+}
+
+/* テーブル */
+.qiita-prose table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1em 0;
+    font-size: 14px;
+}
+
+.qiita-prose th,
+.qiita-prose td {
+    border: 1px solid var(--qiita-border);
+    padding: 8px 12px;
+    text-align: left;
+}
+
+.qiita-prose th {
+    background-color: #F5F5F5;
+    font-weight: 700;
+}
+
+.qiita-prose tr:nth-child(even) {
+    background-color: #FAFAFA;
+}
+
+/* 水平線 */
+.qiita-prose hr {
+    border: none;
+    border-top: 1px solid var(--qiita-border);
+    margin: 2em 0;
+}
+
+/* 画像 */
+.qiita-prose img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin: 1em 0;
+}
+
+/* 取り消し線 */
+.qiita-prose del {
+    color: var(--qiita-text-secondary);
+}
+
+/* リンク */
+.qiita-prose a {
+    color: var(--qiita-text-link);
+    text-decoration: none;
+}
+
+.qiita-prose a:hover {
+    text-decoration: underline;
 }
 
 /* ============================================================
@@ -640,6 +755,44 @@ a:hover {
     margin-bottom: 20px;
     font-size: 13px;
     color: #DC3545;
+}
+
+/* Markdownガイド（フォーム内アコーディオン） */
+.qiita-markdown-guide {
+    margin-top: 8px;
+}
+
+.qiita-markdown-guide summary {
+    font-size: 13px;
+    color: var(--qiita-text-secondary);
+    cursor: pointer;
+    padding: 6px 0;
+    user-select: none;
+}
+
+.qiita-markdown-guide summary:hover {
+    color: var(--qiita-green);
+}
+
+.qiita-markdown-guide__body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 8px;
+    padding: 12px 16px;
+    background-color: #FAFAFA;
+    border: 1px solid var(--qiita-border);
+    border-radius: var(--qiita-radius);
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+.qiita-markdown-guide__body code {
+    background-color: #F9F2F4;
+    color: #C7254E;
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-size: 12px;
 }
 
 /* ============================================================

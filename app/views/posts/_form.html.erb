@@ -71,8 +71,28 @@
     <%= f.text_area :content,
         class: "qiita-form-textarea",
         rows: 10,
-        placeholder: "何を学び、どう感じましたか？" %>
-  </div>
+        placeholder: "何を学び、どう感じましたか？（Markdown記法が使えます）" %>
+    <div class="qiita-markdown-guide">
+      <details>
+        <summary>📝 Markdown記法ガイド</summary>
+        <div class="qiita-markdown-guide__body">
+          <div class="qiita-markdown-guide__col">
+            <code>## 見出し</code><br>
+            <code>**太字**</code> → <strong>太字</strong><br>
+            <code>*斜体*</code> → <em>斜体</em><br>
+            <code>~~取り消し~~</code> → <del>取り消し</del><br>
+            <code>[リンク](URL)</code> → リンク
+          </div>
+          <div class="qiita-markdown-guide__col">
+            <code>- リスト項目</code><br>
+            <code>1. 番号リスト</code><br>
+            <code>> 引用</code><br>
+            <code>`インラインコード`</code><br>
+            <code>```コードブロック```</code>
+          </div>
+        </div>
+      </details>
+    </div>
 
   <!-- 送信 -->
   <div style="display:flex;align-items:center;justify-content:flex-end;gap:12px;padding-top:16px;border-top:1px solid var(--qiita-border);">
