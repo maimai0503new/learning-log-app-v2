@@ -92,18 +92,14 @@ test:
 production:
   primary: &primary_production
     <<: *default
-    database: learning_log_app_v3_production
-    username: learning_log_app_v3
-    password: <%= ENV["LEARNING_LOG_APP_V3_DATABASE_PASSWORD"] %>
+    # Renderの環境変数「DATABASE_URL」からすべての接続情報を読み取る
+    url: <%= ENV['DATABASE_URL'] %>
   cache:
     <<: *primary_production
-    database: learning_log_app_v3_production_cache
     migrations_paths: db/cache_migrate
   queue:
     <<: *primary_production
-    database: learning_log_app_v3_production_queue
     migrations_paths: db/queue_migrate
   cable:
     <<: *primary_production
-    database: learning_log_app_v3_production_cable
     migrations_paths: db/cable_migrate
