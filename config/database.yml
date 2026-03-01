@@ -18,6 +18,11 @@ default: &default
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   max_connections: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  <% if ENV["DB_HOST"] %>
+  host: <%= ENV["DB_HOST"] %>
+  username: postgres
+  password: postgres
+  <% end %>
 
 
 development:
@@ -87,7 +92,9 @@ test:
 production:
   primary: &primary_production
     <<: *default
-    url: <%= ENV["DATABASE_URL"] %>
+    database: learning_log_app_v3_production
+    username: learning_log_app_v3
+    password: <%= ENV["LEARNING_LOG_APP_V3_DATABASE_PASSWORD"] %>
   cache:
     <<: *primary_production
     database: learning_log_app_v3_production_cache

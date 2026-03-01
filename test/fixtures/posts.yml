@@ -1,0 +1,11 @@
+# test/fixtures/posts.yml
+
+one:
+  title: "最初のテスト投稿"
+  content: "テストの本文です"
+  user: one # users.yml の "one" (Taro) と紐付けるための記述
+
+two:
+  title: "2つ目のテスト投稿"
+  content: "2つ目の本文です"
+  user: two # users.yml の "two" (Hanako) と紐付けるための記述
