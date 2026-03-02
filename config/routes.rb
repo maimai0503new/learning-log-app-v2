@@ -6,6 +6,6 @@ Rails.application.routes.draw do
     resources :favorites, only: [:create, :destroy]
     resources :comments, only: [:create, :destroy]
   end
-  
+  get "about", to: "about#index"
   root "home#index"
 end

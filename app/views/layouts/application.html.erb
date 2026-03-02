@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Learning Log" %></title>
+    <title><%= content_for(:title) || "LEARNBRARY" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="Learning Log">
+    <meta name="application-name" content="LEARNBRARY">
     <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -23,9 +23,10 @@
     <!-- Qiita風ヘッダー -->
     <header class="qiita-header">
       <div class="qiita-header__inner">
-        <a href="/" class="qiita-header__logo">LearningLog</a>
+        <a href="/" class="qiita-header__logo">LEARNBRARY</a>
         <div class="qiita-header__spacer"></div>
         <nav class="qiita-header__nav">
+          <%= link_to "LEARNBRARYとは", about_path %>
           <% if user_signed_in? %>
             <%= link_to "タイムライン", posts_path %>
             <%= link_to "プロフィール", edit_user_registration_path %>

@@ -1,0 +1,58 @@
+<div class="max-w-4xl mx-auto py-12 px-4">
+  <%# ヒーローセクション %>
+  <div class="text-center mb-16">
+    <h1 class="text-5xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+      LEARNBRARY
+    </h1>
+    <p class="text-xl text-gray-600">あなたの学びを、一生モノの図書館に。</p>
+  </div>
+
+  <%# コンセプト説明 %>
+  <div class="grid md:grid-cols-2 gap-12 items-center mb-20">
+    <div>
+      <h2 class="text-3xl font-bold mb-6 border-l-4 border-primary pl-4">LEARNBRARYとは？</h2>
+      <p class="text-gray-700 leading-relaxed mb-4">
+        読んだ本の記録と、そこから得た学びをセットで蓄積していく「学習記録プラットフォーム」です。
+      </p>
+      <p class="text-gray-700 leading-relaxed">
+        ただ記録するだけでなく、日本十進分類法（NDC）を用いてあなたの知識を自動でカテゴリ分け。自分がどの分野を深く学んでいるのかを可視化します。
+      </p>
+    </div>
+    <div class="bg-base-200 p-8 rounded-3xl flex justify-center items-center shadow-inner">
+      <span class="text-8xl">📚</span>
+    </div>
+  </div>
+
+  <%# 特徴セクション %>
+  <div class="grid md:grid-cols-3 gap-8 mb-20">
+    <div class="card bg-base-100 shadow-xl border border-base-200">
+      <div class="card-body items-center text-center">
+        <div class="text-4xl mb-2">🔍</div>
+        <h3 class="card-title text-primary">爆速入力</h3>
+        <p class="text-sm text-gray-500">本のタイトルを入れるだけで、国会図書館から情報を自動取得。</p>
+      </div>
+    </div>
+    <div class="card bg-base-100 shadow-xl border border-base-200">
+      <div class="card-body items-center text-center">
+        <div class="text-4xl mb-2">🏷️</div>
+        <h3 class="card-title text-secondary">自動分類</h3>
+        <p class="text-sm text-gray-500">NDCコードに基づき、あなたの学びを美しく色分けして整理。</p>
+      </div>
+    </div>
+    <div class="card bg-base-100 shadow-xl border border-base-200">
+      <div class="card-body items-center text-center">
+        <div class="text-4xl mb-2">📊</div>
+        <h3 class="card-title text-accent">可視化</h3>
+        <p class="text-sm text-gray-500">学習傾向をグラフで分析。知識のポートフォリオが完成します。</p>
+      </div>
+    </div>
+  </div>
+
+  <%# アクションボタン %>
+  <div class="text-center">
+    <%= link_to "学習を記録しにいく", new_post_path, class: "btn btn-primary btn-lg px-12 rounded-full shadow-lg hover:scale-105 transition-transform" %>
+    <div class="mt-6 text-sm text-gray-400">
+      LEARNBRARY v1.0 — Empower your curiosity.
+    </div>
+  </div>
+</div>
